@@ -10,7 +10,7 @@ prometheus:
     # pod label configurations
     podLabels: [{"action":"labelmap","regex":"__meta_kubernetes_pod_label_(app.*|release.*)"}]
     # service label configurations
-    serviceLabels: [{}]
+    serviceLabels: [{"action":"labelmap","regex":"__meta_kubernetes_service_label_(app.*|release.*)"}]
 
 namespace: prometheus
 
