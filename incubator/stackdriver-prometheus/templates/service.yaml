@@ -1,0 +1,18 @@
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+{{ include "labels.standard" . | indent 4 }}
+  name: {{ template "sd-prometheus.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  annotations:
+{{ toYaml .Values.service.annotations | indent 4 }}
+spec:
+  selector:
+    app: {{ template "sd-prometheus.name" . }}
+    release: "{{ .Release.Name }}"
+  type: "{{ .Values.service.type }}"
+  ports:
+  - name: prometheus
+    protocol: TCP
+    port: 9090

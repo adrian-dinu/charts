@@ -1,0 +1,2 @@
+Prometheus server can be accessed via port 9090 on the following DNS name from within your cluster:
+{{ template "sd-prometheus.fullname" . }}.{{ .Values.namespace }}.svc.cluster.local

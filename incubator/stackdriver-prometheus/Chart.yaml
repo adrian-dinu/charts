@@ -1,0 +1,10 @@
+name: stackdriver-prometheus
+keywords:
+- stackdriver
+- prometheus
+version: 0.0.1
+appVersion: release-0.4.3
+description: A Prometheus server that can send metrics to Stackdriver.
+icon: https://prometheus.io/assets/prometheus_logo_grey.svg
+details:
+  "More information at: https://github.com/Stackdriver/stackdriver-prometheus"

@@ -1,0 +1,44 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: {{ template "sd-prometheus.fullname" . }}-server
+  namespace: {{ .Values.namespace }}
+  labels:
+    name: {{ template "sd-prometheus.fullname" . }}-server
+{{ include "labels.standard" . | indent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "sd-prometheus.name" . }}
+  template:
+    metadata:
+      name: {{ template "sd-prometheus.name" . }}
+      labels:
+        app: {{ template "sd-prometheus.name" . }}
+        release: {{ .Release.Name }}
+        name: {{ template "sd-prometheus.fullname" . }}-server
+      annotations:
+        prometheus.io/scrape: 'true'
+    spec:
+      # Needed when using unmodified rbac-setup.yml
+      serviceAccountName: {{ template "sd-prometheus.serviceAccountName" . }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+      containers:
+      - name: prometheus
+        image: {{ .Values.image.name }}:{{ .Values.image.tag}}
+        {{ if eq .Values.prometheus.debug true }}
+        args: ["--config.file=/etc/prometheus/prometheus.yml", "--log.level=debug"]
+        {{ end }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: web
+          containerPort: 9090
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/prometheus
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ template "sd-prometheus.name" . }}

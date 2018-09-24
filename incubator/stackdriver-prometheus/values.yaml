@@ -1,0 +1,31 @@
+prometheus:
+  # enables debug log on the container, can be very verbose
+  debug: false
+  # Prometheus config
+  config:
+    # Stackdriver replication info needs
+    projectId:
+    clusterName:
+    clusterZone:
+    # pod label configurations
+    podLabels: [{"action":"labelmap","regex":"__meta_kubernetes_pod_label_(app.*|release.*)"}]
+    # service label configurations
+    serviceLabels: [{}]
+
+namespace: prometheus
+
+image:
+  name: gcr.io/stackdriver-prometheus/stackdriver-prometheus
+  tag: release-0.4.3
+  pullPolicy: IfNotPresent
+
+rbac:
+  create: true
+
+serviceAccount:
+  create: true
+  name:
+
+service:
+  type: ClusterIP
+  annotations: {}
